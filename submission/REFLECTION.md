@@ -1,0 +1,3 @@
+# Reflection — Small-file anti-pattern
+
+Tôi chọn anti-pattern **small files** trong pipeline LLM observability. Lab mô phỏng các lần ghi nhỏ liên tục: NB2 bắt đầu với 200 file và NB6 cũng tạo 200 file cho 100.000 dòng. Khi dashboard phải mở nhiều file, chi phí lập kế hoạch và request tăng; min/max chồng lấn còn làm giảm khả năng skip file. Tôi sẽ gom dữ liệu theo micro-batch đủ lớn, theo dõi file count và kích thước trung bình, rồi chạy compaction có ngưỡng. Chỉ partition theo chiều truy vấn thật sự cần, vì quá nhiều partition nhỏ lại tạo thêm file nhỏ. Trước khi chọn target size, cần đo query latency và pruning trên workload thực tế; kết quả 256 KB của lab chỉ nhằm làm hiệu ứng dễ quan sát, không phải cấu hình production.
